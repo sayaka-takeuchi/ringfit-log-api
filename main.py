@@ -6,10 +6,21 @@ from sqlalchemy.orm import Session
 from db import Base, SessionLocal, engine
 from schemas.log_schema import LogCreate, Log
 from services import logs
+from fastapi.middleware.cors import CORSMiddleware
 
 
 Base.metadata.create_all(bind=engine)
-app = FastAPI()
+app = FastAPI(servers=[{'url': 'http://localhost:8000'}], redoc_url=None)
+
+origins = ['http://localhost:19006']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Dependency
